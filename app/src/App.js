@@ -8,6 +8,7 @@ class App extends Component {
       level: 1,
       exp: 0,
       maxExp: 10,
+      gainedLevel: false,
       health: 10,
       maxHealth: 10,
       skillPoints: 0,
@@ -19,6 +20,9 @@ class App extends Component {
     this.addExp = this.addExp.bind(this);
     this.levelUp = this.levelUp.bind(this);
   }
+ 
+  ////////// CRAWL! //////////
+
   crawl() {
 
     console.log('crawl');
@@ -29,14 +33,16 @@ class App extends Component {
     this.resetHealth();
     setTimeout(() => {
       
-      this.reduceHealth(1);
+      this.reduceHealth(this.state.maxHealth / 3);
       this.addExp();
 
       this.setState(() => ({
         crawling: false
       }))
-    }, 500)
+    }, 2000)
   }
+
+  ////////// HEALTH //////////
 
   resetHealth() {
 
@@ -48,11 +54,15 @@ class App extends Component {
 
   reduceHealth(damage) {
 
-    console.log('reduce health', damage);
+    let totalDamage = Math.floor(Math.random() * damage) + 1;
+
+    console.log('reduce health', totalDamage);
     this.setState((prevState) => ({
-      health: prevState.health - damage
+      health: prevState.health - totalDamage
     }))
   }
+
+  ////////// EXP/LEVEL //////////
 
   addExp() {
     
@@ -69,6 +79,8 @@ class App extends Component {
     this.setState((prevState) => ({
       level: prevState.level + 1,
       skillPoints: prevState.skillPoints + 2,
+      exp: 0,
+      gainedLevel: true,
       maxExp: prevState.maxExp + (prevState.maxExp * 1.2)
     }))
   }
