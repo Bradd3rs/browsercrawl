@@ -12,7 +12,8 @@ class Player extends Component {
     render() {
         return (
             <div>
-                <div>Level: {this.props.level}</div>
+                <div>Zone: {this.props.zone}</div>
+                <div>Level: {this.props.playerLevel}</div>
                 <div>Health: {this.props.health}</div>
                 <div>Exp: {this.props.exp} / {Math.round(this.props.maxExp)}</div>
                 <div>Skill points: {this.props.skillPoints}</div>
