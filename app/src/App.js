@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Player from './components/Player';
+import Masteries from './components/Masteries';
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class App extends Component {
     this.crawling = this.crawling.bind(this);
     this.reduceHealth = this.reduceHealth.bind(this);
     this.resetHealth = this.resetHealth.bind(this);
+    this.increaseMaxHealth = this.increaseMaxHealth.bind(this);
     this.addExp = this.addExp.bind(this);
     this.levelUp = this.levelUp.bind(this);
     this.increaseZone = this.increaseZone.bind(this);
@@ -37,7 +39,7 @@ class App extends Component {
 
     setTimeout(() => {
 
-      this.reduceHealth(this.state.maxHealth / 3, this.state.damageMultiplier);
+      this.reduceHealth(this.state.playerLevel, this.state.damageMultiplier);
       this.addExp();
       this.increaseZone();
       this.crawling();
@@ -68,6 +70,14 @@ class App extends Component {
     console.log('reduce health', totalDamage);
     this.setState((prevState) => ({
       health: prevState.health - totalDamage
+    }))
+  }
+
+  increaseMaxHealth() {
+
+    this.setState((prevState) => ({
+      maxHealth: prevState.maxHealth + 2,
+      health: prevState.maxHealth + 2
     }))
   }
 
@@ -137,6 +147,8 @@ class App extends Component {
 
             <h1>Ded</h1>
         }
+        <Masteries
+          increaseMaxHealth={this.increaseMaxHealth} />
       </div>
     );
   }
