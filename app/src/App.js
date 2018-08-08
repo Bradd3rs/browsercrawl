@@ -12,6 +12,7 @@ class App extends Component {
     this.createGrid = this.createGrid.bind(this);
     this.nextLevel = this.nextLevel.bind(this);
     this.selectBlock = this.selectBlock.bind(this);
+    this.randomize = this.randomize.bind(this);
   }
 
   componentDidMount() {
@@ -19,11 +20,25 @@ class App extends Component {
     this.createGrid();
   }
 
+  randomize() {
+    setTimeout(() => {
+      let i = 0;
+      for(i; i < this.state.gridSize; i++) {
+        
+        let random = Math.floor(Math.random() * Math.floor(this.state.gridSize));
+        
+        document.getElementsByClassName("row")[i].childNodes[random].classList.remove('active');
+      }
+    }, 1);
+  }
+
   createGrid() {
     let size = this.state.gridSize;
     let grid = Array(size).fill(0).map(()=>Array(size).fill(0));
 
-    this.setState(() => ({ grid  }))
+    this.randomize();
+
+    return this.setState(() => ({ grid }))
   }
 
   nextLevel() {
@@ -34,7 +49,6 @@ class App extends Component {
         gridSize: prevState.gridSize + 1
       }
     ))
-    this.createGrid()
     setTimeout(() => {
       this.createGrid()
     }, 1);
@@ -46,7 +60,7 @@ class App extends Component {
   }
   
   render() {
-    console.log(this.state.grid);
+    console.log('grid', this.state.grid);
     const Block = styled.div` 
       background: tomato;
       padding: ${this.state.zoom}%;
@@ -56,9 +70,14 @@ class App extends Component {
       font-weight: bold;
       font-size: 2em;
       text-align: center;
+      transition: background 1s ease-out;
 
       &.selected {
         background: rebeccapurple;
+      }
+
+      &.active {
+        pointer-events: none;
       }
 
       @media( min-width: 768px) {
@@ -67,7 +86,7 @@ class App extends Component {
       }
     `;
     return (
-      <div>
+      <Container>
         {
           this.state.grid.map((column, i) => (
             <Row key={i} className={`row row-${i}`}>
@@ -76,19 +95,23 @@ class App extends Component {
                 let number = Math.floor(Math.random()*90000) + 10000;
                 return (
 
-                  <Block key={j} className={`flex-item flex1 block-${number}`} onClick={() => this.selectBlock(number)}></Block>
+                  <Block key={j} className={`block active block-${number}`} onClick={() => this.selectBlock(number)}></Block>
                 )})
               }
             </Row>
           ))
         }
         <button type="button" onClick={this.nextLevel}>Next level</button>
-      </div>
+      </Container>
     );
   }
 }
 
 export default App;
+
+const Container = styled.section`
+  margin-top: 5vh;
+`;
 
 const Row = styled.div`
   /* display: block; */
